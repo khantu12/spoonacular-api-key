@@ -1,6 +1,11 @@
 const axios = require('axios');
 const api_regex = /"apiKey":"(.*?)"/i
 
+const creds = {
+    email: "khantu@abv.bg",
+    password: "123456789"
+}
+
 const get_key = () => {
     return axios.get('https://spoonacular.com/food-api/console#Dashboard', {withCredentials:true})
     .then((response) => {
@@ -13,15 +18,16 @@ const get_key = () => {
 
 const delete_acc = () => {
     get_key().then((key) => {
-        axios.get(`https://api.spoonacular.com/spoonacular-api/deleteAccount?apiKey=${key}`);
+        return axios.get(`https://api.spoonacular.com/spoonacular-api/deleteAccount?apiKey=${key}`);
     });
 }
 
 const cred = (cookie, success) => {
-    return axios.get(`https://spoonacular.com/api/logIn?email=khantu%40abv.bg&password=gergi123`, {headers: {"Cookie":cookie.toString()}})
+    return axios.get(`https://spoonacular.com/api/logIn?email=${creds.email}&password=${creds.password}`, {headers: {"Cookie":cookie.toString()}})
     .then((res) => {
         if (res.data.status === 'failure') {
-            return axios.get(`https://spoonacular.com/api/register?email=khantu%40abv.bg&password=gergi123`, {headers: {"Cookie":cookie.toString()}}).then((res => {
+            return axios.get(`https://spoonacular.com/api/register?email=${creds.email}&password=${creds.password}`, {headers: {"Cookie":cookie.toString()}})
+            .then((res => {
                return cred(cookie, success)
             }));
         } else {
@@ -40,3 +46,4 @@ const get_api_key = (logged_cookie, success) => {
 
 exports.get_key = get_key;
 exports.delete_acc = delete_acc;
+exports.creds = creds;
