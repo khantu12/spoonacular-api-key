@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="Awaiken">
+
+<title>spoonacular recipe and food API</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="/application/frontend/css/normalize.min.css" />
+<link rel="stylesheet" type="text/css" href="/application/frontend/css/foundation.min.css" />
+<link rel="stylesheet" type="text/css" href="/application/frontend/css/styles.min.css" />
+<link rel="stylesheet" type="text/css" href="/application/frontend/css/notifications.min.css" />
+<style>
+        p {
+            text-align: inherit;
+        }
+        .divText, .optionGroup label, li, ol, p, ul {
+            font-size: 16px;
+        }
+        .row {
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+    </style>
+
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900%7CRubik:300,400,500,700,900" rel="stylesheet">
+
+<link href="/application/frontend/css/api/bootstrap.min.css" rel="stylesheet" media="screen">
+
+<link rel="stylesheet" href="/application/frontend/css/api/slicknav.css">
+
+<link href="/application/frontend/css/api/custom.min.css" rel="stylesheet" media="screen">
+
+
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<script type="text/javascript" src="/application/frontend/js/vue.min.js?c=1"></script>
+<script type="text/javascript" src="/application/frontend/js/notifications.min.js?c=1"></script>
+<script type="text/javascript" src="/application/frontend/js/config.min.js?c=1"></script>
+<script type="text/javascript" src="/application/frontend/js/jquery.min.js?c=1"></script>
+</head>
+<body data-spy="scroll" data-target="#navigation" data-offset="71">
+
+<header class="header-layout-1">
+<nav class="navbar navbar-expand-md navbar-light fixed-top" id="navigation">
+<div class="container">
+<a class="navbar-brand" href="/food-api"><img src="/application/frontend/images/logo-simple-framed-green-gradient.svg" alt="spoonacular logo" /> <span class="greenF" style="font-size: 18px;margin-left: 10px;">spoonacular API</span></a>
+<ul class="navbar-nav ml-auto" id="main-menu">
+<li class="nav-item"><a class="nav-link active" href="/food-api">Overview</a></li>
+<li class="nav-item"><a class="nav-link" href="/food-api/docs">Docs</a>
+<ul>
+<li><a href="/food-api/docs">Full Documentation</a></li>
+<li><a href="/food-api/faq">FAQ</a></li>
+<li><a href="/food-api/sdk">SDKs</a></li>
+</ul>
+</li>
+<li class="nav-item"><a class="nav-link" href="/food-api/pricing">Pricing</a></li>
+<li class="nav-item"><a class="nav-link" href="/food-api/terms">Terms</a></li>
+<li class="nav-item"><a class="nav-link" href="/food-api/apps">Applications</a></li>
+<li class="nav-item"><a class="nav-link download-link" href="/food-api/console">
+Start Now
+</a></li>
+</ul>
+<div class="navbar-toggle"></div>
+<div id="responsive-menu"></div>
+</div>
+</nav>
+</header><style>
+    .notCorrect {
+        border: 2px solid #E63F2F !important;
+    }
+</style>
+
+<div id="hackathonSignUp" class="reveal-modal" data-reveal>
+<h2>$10 Hackathon / University Sign Up</h2>
+<div style="margin-bottom: 5px;">Please get a username on <a href="https://rapidapi.com/spoonacular/api/Recipe%20-%20Food%20-%20Nutrition">RapidAPI.com</a> before sending this form.</div>
+<div style="margin-bottom: 5px;">You can get up to 5,000 requests per day with our academic or hackathon plan for $10/month. Please be sure to read the slides that will be sent to you with your invitation.</div>
+<form id="hackathonSignUpForm" action="/hackathonSignUp" method="post">
+Your name: <input type="text" name="name" onkeyup="return throttle(checkHackathonRegisterFields(event),100);">
+Your email (for academic access, please use your university email): <input type="text" name="email" onkeyup="return throttle(checkHackathonRegisterFields(event),100);">
+School or hackathon name (or link): <input type="text" name="eventName" onkeyup="return throttle(checkHackathonRegisterFields(event),100);">
+RapidAPI username (sign up at <a href="https://rapidapi.com">rapidapi.com</a> before sending this form): <input type="text" name="mashapeUsername" onkeyup="return throttle(checkHackathonRegisterFields(event),100);">
+What are you going to build? (at least 150 characters): <textarea type="text" name="message" rows="3" onkeyup="return throttle(checkHackathonRegisterFields(event),100);"></textarea>
+Access needed until (extension after 3 months can be arranged): <input type="date" name="endDate" value="2019-12-18" min="2019-12-18" max="2020-03-17">
+<div style="margin-bottom: 5px;">Please like this page before requesting access.</div>
+<iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fspoonacular.com%2Ffood-api%2Fconsole&amp;send=false&amp;layout=button_count&amp;width=85&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=lucida+grande&amp;height=21&amp;appId=552345664830110" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:78px; height:21px;position:relative;bottom:3px" allowTransparency="true"></iframe>
+<div class="optionGroup">
+<div class="checkbox">
+<input id="agreeTermsBox" type="checkbox" name="agreeTerms" value="" onclick="checkHackathonRegisterFields(event)">
+<label for="agreeTermsBox" onclick="checkHackathonRegisterFields(event)">I agree to spoonacular's <a href="/terms" target="_blank">Terms and Privacy Policy</a></label><br>
+</div>
+<div class="checkbox">
+<input id="agreeEmailsBox" type="checkbox" name="agreeEmails" value="" onclick="checkHackathonRegisterFields(event)">
+<label for="agreeEmailsBox" onclick="checkHackathonRegisterFields(event)">I agree to receive emails about API updates*</label><br>
+</div>
+</div>
+<div style="margin-bottom: 5px;">We are a small team and check every request manually. If your request is granted it may take up to 72 hours for us to get back to you.</div>
+<div id="doneButton" class="button blue disabled" style="text-align:center" onclick="if ($(this).attr('class').indexOf('disabled') < 0) requestApiKey();">request access</div>
+<div style="margin-top:15px;font-size:0.9em;">
+*By checking this box, you agree we may use the information you provided to contact you by email. You can unsubscribe at any time. We use MailChimp to send email - your information will be transferred to them to be processed in accordance with their <a href="https://mailchimp.com/legal/privacy/">Privacy Policy</a> and <a href="https://mailchimp.com/legal/terms/">Terms</a>.
+</div>
+</form>
+<a class="close-reveal-modal">&#215;</a>
+</div>
+<style>
+    .checkbox label {
+        width: initial !important;
+    }
+    .optionGroup {
+        margin: 10px 0;
+    }
+    form label a {
+        font-size: inherit;
+    }
+</style>
+<script src="/application/frontend/js/Chart.min.js?c=1"></script>
+<script src="/application/frontend/js/axios.min.js?c=1"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<div id="wrapper" class="row" style="max-width:1100px;margin-top:150px">
+<div class="col-lg-12">
+<h1>API Console</h1>
+
+<div id="apiConsole" class="row">
+<div class="padded shadow-box-api col-lg-6" style="height:363px">
+<template v-if="userStatus=='signUp'">
+<h3>Sign Up</h3><br>
+Email:<br>
+<input type="text" v-model="email">
+Password:<br>
+<input type="password" v-model="password" placeholder="at least 6 characters">
+<button class="button actionColor" v-on:click="signUp" :disabled="password.length < 6">Sign Up</button>
+<br><br>
+<p class="small">You have an account already? <a href="#" v-on:click="userStatus = 'login'">Log in here</a>.</p>
+<p class="small">Forgot your password? <a href="#" v-on:click="userStatus = 'resetPassword'">Reset it here</a>.</p>
+</template>
+<template v-if="userStatus=='login'">
+<h3>Welcome back, Log In</h3><br>
+Email:<br>
+<input type="text" v-model="email">
+Password:<br>
+<input type="password" v-model="password">
+<button class="button actionColor" v-on:click="logIn">Log In</button>
+<br><br>
+<p class="small">Do not have an account yet? <a href="#" v-on:click="userStatus = 'signUp'">Sign up in here</a>.</p>
+<p class="small">Forgot your password? <a href="#" v-on:click="userStatus = 'resetPassword'">Reset it here</a>.</p>
+</template>
+<template v-if="userStatus=='resetPassword'">
+<h3>Enter your Email to reset your password</h3><br>
+Email:<br>
+<input type="text" v-model="email">
+<button class="button actionColor" v-on:click="sendNewPassword">Send temporary password</button>
+<br><br>
+<p class="small">Do not have an account yet? <a href="#" v-on:click="userStatus = 'signUp'">Sign up in here</a>.</p>
+<p class="small">You have an account already? <a href="#" v-on:click="userStatus = 'login'">Log in here</a>.</p>
+</template>
+</div>
+<div class="col-lg-6" style="padding-left:20px">
+<img src="/application/frontend/images/food-api/dough.jpg" title="Show us what you can dough">
+</div>
+</div>
+</div>
+<style>
+    .invoiceLine {
+        padding: 5px;
+        /* border: 1px solid black;    */
+        font-size: 14px;
+    }
+    .pricingBox {
+        width: 186px;
+        margin: 0 8px 0 0;
+    }
+    .pricingBox button {
+        left: 39px;
+    }
+    .pricingBox button:hover {
+        left: 22px;
+    }
+
+
+    .pricingBox .details {
+        font-size: 13px;
+    }
+
+    input {
+        padding: 10px !important;
+        font-size: 16px !important;
+        height: initial !important;
+    }
+</style>
+<script>
+// stripe checkout handling
+var stripe = Stripe('pk_live_HcpxInnGJgx3iuD6fs53xmXx');
+// var stripe = Stripe('pk_test_bTpx3zII7SciCKGSnomNwyFC');
+
+var app = new Vue({
+  el: '#apiConsole',
+  mounted () {
+    this.notifier = new AWN({
+        maxNotifications: 6,
+        messages: {
+            alert: "Sorry but something went wrong.",
+        }
+    });
+
+    // check whether there is a hash in the URL to direct us to a section
+    var cHash = window.location.hash.replace('#', '').replace(/-/g, ' ');
+    if (cHash.length > 0) {
+        this.show(cHash);
+    } else {
+        this.show('Dashboard');
+    }
+
+    // change cc details
+    var vm = this;
+    var elements = stripe.elements();
+
+    // custom styling can be passed to options when creating an Element.
+    var style = {
+        base: {
+            color: '#32325d',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+                color: '#aab7c4'
+            }
+        },
+        invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+        }
+    };
+
+    // create an instance of the card Element.
+    var changeCard = elements.create('card', {style: style});
+
+    // add an instance of the card Element into the `card-element` <div>.
+    changeCard.mount('#change-card-element');
+
+    // handle real-time validation errors from the card Element.
+    changeCard.addEventListener('change', function(event) {
+        vm.changeCcReady = event.complete;
+        var displayError = document.getElementById('change-card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+            displayError.classList.add('visible');
+        } else {
+            displayError.textContent = '';
+            displayError.classList.remove('visible');
+        }
+    });
+
+    // handle form for changing credit card details.
+    var changeCcButton = document.getElementById('changeCcButton');
+    changeCcButton.addEventListener('click', function(event) {
+        event.preventDefault();
+
+        stripe.createToken(changeCard).then(function(result) {
+            if (result.error) {
+                // Inform the user if there was an error.
+                var errorElement = document.getElementById('change-card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Send the token to your server.
+                vm.stripeTokenHandlerUpdateCc(result.token);
+            }
+        });
+    });
+  },
+  methods: {
+      show: function(section) {
+        this.activeSection = section;
+        // document.querySelector('h1').scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
+        window.location = '#' + section.replace(/ /g, '-');
+
+        switch (section) {
+            case 'Dashboard':
+                this.renderChart();
+                this.renderEndpointTable();
+                break;
+            case 'Plan':
+                this.listInvoices();
+                this.listCreditCards();
+                break;
+        }
+      },
+      logIn: function() {
+        var vm = this;
+        axios.get(SITE_BASE + 'api/logIn?email='+encodeURIComponent(this.email)+'&password='+encodeURIComponent(this.password))
+            .then(function (response) {
+                if (response.data.status == 'success') {
+                    location.reload();
+                } else {
+                    vm.notifier.alert('Login information incorrect.');
+                }
+            })
+            .catch(function (error) {
+                vm.notifier.alert('Login did not work, please try again.');
+            });
+      },
+      deleteAccount: function() {
+        var vm = this;
+        axios.get(BASE + 'spoonacular-api/deleteAccount?apiKey='+encodeURIComponent(this.user.apiKey))
+            .then(function (response) {
+                if (response.data.status == 'success') {
+                    vm.notifier.success(response.data.message);
+                    setTimeout(() => {
+                        location.href = '/food-api/logOut';
+                    }, 3000);
+                } else {
+                    vm.notifier.alert(response.data.message);
+                }
+            })
+            .catch(function (error) {
+                vm.notifier.alert(error);
+            });
+      },
+      signUp: function() {
+        var vm = this;
+        axios.get(SITE_BASE + 'api/register?email='+encodeURIComponent(this.email)+'&password='+encodeURIComponent(this.password))
+            .then(function (response) {
+                if (response.data.status == 'success') {
+                    location.reload();
+                } else {
+                    vm.notifier.alert(response.data.message);
+                }
+            })
+            .catch(function (error) {
+                vm.notifier.alert(error);
+            });
+      },
+      sendNewPassword: function() {
+        var vm = this;
+        axios.get(SITE_BASE + 'api/resetPassword?email='+encodeURIComponent(this.email))
+            .then(function (response) {
+                if (response.data.status == 'success') {
+                    vm.notifier.success(response.data.message);
+                } else {
+                    vm.notifier.alert(response.data.message);
+                }
+            })
+            .catch(function (error) {
+                vm.notifier.alert(error);
+            });
+      },
+      updatePassword: function() {
+        var vm = this;
+        axios.get(BASE + 'spoonacular-api/updatePassword?apiKey='+encodeURIComponent(this.user.apiKey)+'&newPassword='+encodeURIComponent(this.newPassword))
+            .then(function (response) {
+                if (response.data.status == 'success') {
+                    vm.notifier.success(response.data.message);
+                } else {
+                    vm.notifier.alert(response.data.message);
+                }
+            })
+            .catch(function (error) {
+                vm.notifier.alert(error);
+            });
+      },
+      generateNewApiKey: function() {
+        var vm = this;
+        axios.get(SITE_BASE + 'api/generateNewApiKey?k='+encodeURIComponent(this.user.apiKey))
+            .then(function (response) {
+                if (response.data.status == 'success') {
+                    vm.user.apiKey = response.data.apiKey;
+                    vm.notifier.success(response.data.message);
+                } else {
+                    vm.notifier.alert(response.data.message);
+                }
+            })
+            .catch(function (error) {
+                vm.notifier.alert(error);
+            });
+      },
+      stripeTokenHandlerUpdateCc: function(stripeToken) {
+        var vm = this;
+
+        axios.post(BASE + 'spoonacular-api/paymentDetails?apiKey=' + encodeURIComponent(this.user.apiKey), {'stripeToken': stripeToken.id})
+        .then(function (response) {
+            if (response.data.status == 'success') {
+                vm.notifier.success('Your payment information has been updated successfully!');
+                app.creditCards = null;
+                app.listCreditCards();
+            } else {
+                vm.notifier.alert(response.data.message);
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+            vm.notifier.alert('Could not update payment information, please get in touch with us.');
+        });
+      },
+      subscribe: function(plan) {
+        var vm = this;
+
+        // if user already has a subscription, we must call the change endpoint, otherwise we start a checkout session
+        if (this.user.stripeSubscriptionId) {
+            // console.log('sending stripe request to the server');
+            axios.post(SITE_BASE + 'api/switchPlan', {plan: plan, email: this.user.email})
+            .then(function (response) {
+                if (response.data.status == 'success') {
+                    vm.notifier.success('Plan changed successfully.');
+                    vm.user.plan = plan;
+                    setTimeout(() => {
+                        location.reload();    
+                    }, 1000);                    
+                } else {
+                    vm.notifier.alert(response.data.message);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                vm.notifier.alert('Subscription failed, please get in touch with us.');
+            });
+        } else {
+            // console.log('sending stripe request to the server');
+            axios.post(SITE_BASE + 'api/subscribe', {plan: plan, email: this.user.email})
+            .then(function (response) {
+                if (response.data.status == 'success') {
+                    //console.log(response);
+                    stripe.redirectToCheckout({
+                        sessionId: response.data.sessionId
+                    }).then(function (result) {
+                    // If `redirectToCheckout` fails due to a browser or network
+                    // error, display the localized error message to your customer
+                    // using `result.error.message`.
+                    });
+                } else {
+                    vm.notifier.alert(response.data.message);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                vm.notifier.alert('Subscription failed, please get in touch with us.');
+            });
+        }        
+    },
+    listCreditCards: function() {
+        if (this.creditCards == null && this.user.stripeCustomerId != undefined) {
+            this.creditCards = [];
+            var vm = this;
+            axios.get(BASE + 'spoonacular-api/listCards?apiKey='+encodeURIComponent(this.user.apiKey))
+                .then(function (response) {
+                    if (response.data.status == 'success') {
+                        vm.creditCards = response.data.cards;
+                    } else {
+                        vm.notifier.alert(response.data.message);
+                    }
+                })
+                .catch(function (error) {
+                    vm.notifier.alert('Problem listing credit cards.');
+                });
+        }
+      },
+    listInvoices: function() {
+        if (this.invoices == null && this.user.stripeCustomerId != undefined) {
+            this.invoices = [];
+            var vm = this;
+            axios.get(BASE + 'spoonacular-api/invoices?customerId='+encodeURIComponent(this.user.stripeCustomerId))
+                .then(function (response) {
+                    if (response.data.status == 'success') {
+                        vm.invoices = response.data.invoices;
+                    } else {
+                        vm.notifier.alert(response.data.message);
+                    }
+                })
+                .catch(function (error) {
+                    vm.notifier.alert('Problem listing invoices.');
+                });
+        }
+      },
+      renderChart: function() {
+        if (!document.getElementById('apiCallChart')) {
+             return;
+        }
+        var ctx = document.getElementById('apiCallChart').getContext('2d');
+
+        if (this.dataArray == null) {
+            var vm = this;
+            this.dataArray = [];
+            axios.get(BASE + 'spoonacular-api/callStats?apiKey=' + this.user.apiKey)
+                .then(function (response) {
+                    dataArray = response.data;
+
+                    // transform data array to chart dataset
+                    var labels = [];
+                    var requestsData = [];
+                    var pointsData = [];
+                    for (var i = 0; i < dataArray.length; i++) {
+                        var dataPoint = dataArray[i];
+                        labels.push(dataPoint.date);
+                        requestsData.push(dataPoint.requests);
+                        pointsData.push(dataPoint.points);
+                    }
+
+                    new Chart(ctx, {
+                        "type": "line", 
+                        "data": 
+                        { 
+                            "labels": labels, 
+                            "datasets": [
+                                {
+                                    "label": "Requests", 
+                                    "data": requestsData, 
+                                    "fill": false, 
+                                    "borderColor": "rgb(75, 192, 192)", 
+                                    "lineTension": 0.1 
+                                },
+                                {
+                                    "label": "Points", 
+                                    "data": pointsData, 
+                                    "fill": false, 
+                                    "borderColor": "rgb(255, 120, 126)", 
+                                    "lineTension": 0.1 
+                                }
+                            ] 
+                        }, 
+                        "options": {} 
+                    });
+            })
+            .catch(function (error) {
+                vm.notifier.alert('Problem drawing the chart.');
+            })
+            .finally(function () {
+                // always executed
+            });
+        }
+    },
+    renderEndpointTable: function() {
+        if (this.endpointTableRendered || !this.user) {
+            return;
+        }
+        var vm = this;
+        axios.get(BASE + 'spoonacular-api/endpointStats?apiKey=' + this.user.apiKey)
+            .then(function (response) {
+                vm.endpointTableData = response.data;
+        })
+        .catch(function (error) {
+            vm.notifier.alert('Problem getting endpoint data statistics.');
+        })
+        .finally(function () {
+            vm.endpointTableRendered = true;
+        });
+    },
+    endpoint: function (row) {
+        var endpoint = row.endpoint;
+        endpoint = endpoint.replace('RecipesResource', 'recipes');
+        endpoint = endpoint.replace('FoodResource', 'food');
+        return endpoint;
+    },
+    formatDate: function(timestamp) {
+        return new Date(1000 * timestamp).toLocaleDateString();
+    },
+    formatMoney: function(cents) {
+        return 'US$ ' + cents / 100;
+    }
+  },
+  data: {
+    notifier: null,
+    newPassword: '',
+    changePw: false,
+    email: '',
+    stripe: null,
+    changeCcReady: false,
+    showCcForm: false,
+    password: '',
+        invoices: null,
+    creditCards: null,
+    userStatus: 'signUp',
+    activeSection: 'Dashboard',
+    dataArray: null,
+    endpointTableRendered: false,
+    endpointTableData: [],
+    showKey: false
+  }
+});
+</script> </div> 
+
+<section class="mega-footer-layout-1">
+<div class="container">
+<div class="row">
+
+<div class="col-lg-3 col-md-6">
+<div class="footer-link">
+<h3>Company</h3>
+<ul>
+<li><a href="/about">About Us</a></li>
+<li><a href="/press">Press</a></li>
+</ul>
+</div>
+</div>
+
+
+<div class="col-lg-3 col-md-6">
+<div class="footer-link">
+<h3>Legal</h3>
+<ul>
+<li><a href="/food-api/terms">Terms & Conditions</a></li>
+<li><a href="/terms">Privacy Policy</a></li>
+</ul>
+</div>
+</div>
+
+
+<div class="col-lg-3 col-md-6">
+<div class="footer-link">
+<h3>Info</h3>
+<ul>
+<li><a href="/contact">Contact Us</a></li>
+<li><a href="http://status.spoonacular.com/">API Status</a></li>
+</ul>
+</div>
+</div>
+
+
+<div class="col-lg-3 col-md-6">
+<div class="footer-payment">
+
+<a href="http://status.spoonacular.com/">API Uptime Status</a>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+
+
+<script type="text/javascript" src="/application/frontend/js/foundation.min.js?c=1"></script>
+
+<script src="/application/frontend/js/api/bootstrap.min.js?c=1"></script>
+
+<script src="/application/frontend/js/api/responsive-tabs.js?c=1"></script>
+
+<script src="/application/frontend/js/api/jquery.slicknav.js?c=1"></script>
+
+<script src="/application/frontend/js/api/function.min.js?c=1"></script>
+<script type="text/javascript" src="/application/frontend/js/prism.min.js?c=1"></script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-377808-33', 'spoonacular.com');
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview');
+    ga('set', 'anonymizeIp', true);
+    </script>
+<script>
+        var referrer =  document.referrer;
+        if (referrer.indexOf('spoonacular.com') == -1) {
+            var date = new Date();
+            date.setTime(date.getTime() + (7 * 24 * 60 * 1000));
+            var expires = ';path=/; expires=' + date.toGMTString();
+            document.cookie = 'spoonacular_signup_referrer='+encodeURI(referrer) + expires;
+        }
+    </script>
+</body>
+</html> 
