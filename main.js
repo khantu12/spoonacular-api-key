@@ -2,7 +2,7 @@
 const spoonacular = require('./spoonacular');
 
 spoonacular.creds = {
-  email: 'khantu@abv.bg',
+  email: 'some@email.com',
   password: '123456789',
 };
 spoonacular.get_key().then((key) => console.log(key));
